@@ -15,7 +15,7 @@ public class RedBlackTree {
         if(n == null){ 
             Node newNode = new Node(v);
             newNode.parent = parent;
-            fixInsert(n);
+            fixInsert(newNode);
             return newNode;
         }
         if(v < n.value) n.left = insert(n.left, v, n);
@@ -24,12 +24,11 @@ public class RedBlackTree {
         return n;
     }
 
-    private Node fixInsert(Node no){
+    private void fixInsert(Node no){
         if(no.parent == null) case1(no);
         else if(!no.parent.isRed) case2(no);
         else if(uncle(no) != null && uncle(no).isRed) case3(no);
         else case4(no);
-        return null;
     }
 
     private void case1(Node no){
