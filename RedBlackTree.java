@@ -5,6 +5,22 @@ public class RedBlackTree {
         this.root = null;
     }
     // MÉTODOS PRINCIPAIS:
+
+    public boolean isRedBlack(Node no){
+        if(no == null) return true;
+        int left = blackHeight(no.left);
+        int right = blackHeight(no.right);
+        if(left != right) return false;
+        return isRedBlack(no.left) && isRedBlack(no.right);
+    }
+
+    public int blackHeight(Node no){
+        if(no == null) return 1;
+        int left = blackHeight(no.left);
+        int right = blackHeight(no.right);
+        return Math.max(left, right) + (no.isRed ? 0 : 1);
+    }
+
     public void insert(int v){
         Node newNode = insert(this.root, v, null);
         if(newNode != null) this.root = newNode;
