@@ -33,22 +33,38 @@ public class RedBlackTree {
     }
 
     public void insert(int v){
-        Node newNode = insert(this.root, v, null);
-        if(newNode != null) this.root = newNode;
-        this.root.isRed = false;
+        this.root = insert(this.root, v, null);
+        this.root.isRed = false; // Raiz sempre preta
     }
 
     private Node insert(Node n, int v, Node parent){
         if(n == null){ 
             Node newNode = new Node(v);
             newNode.parent = parent;
+            newNode.isRed = true; // Novos nós são vermelhos
             fixInsert(newNode);
-            return newNode;
+            // Retorna a nova raiz da subárvore
+            return getRootFromNode(newNode);
         }
-        if(v < n.value) n.left = insert(n.left, v, n);
-        else if(v > n.value) n.right = insert(n.right, v, n);
-        else return n;
+        
+        if(v < n.value) {
+            n.left = insert(n.left, v, n);
+            n.left.parent = n; // Garantir ligação pai-filho
+        }
+        else if(v > n.value) {
+            n.right = insert(n.right, v, n);
+            n.right.parent = n; // Garantir ligação pai-filho
+        }
+        
         return n;
+    }
+
+    // Método auxiliar para encontrar a raiz atual
+    private Node getRootFromNode(Node no) {
+        while (no.parent != null) {
+            no = no.parent;
+        }
+        return no;
     }
 
     private void fixInsert(Node no){
