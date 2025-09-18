@@ -6,19 +6,30 @@ public class RedBlackTree {
     }
     // MÉTODOS PRINCIPAIS:
 
-    public boolean isRedBlack(Node no){
-        if(no == null) return true;
-        int left = blackHeight(no.left);
-        int right = blackHeight(no.right);
-        if(left != right) return false;
-        return isRedBlack(no.left) && isRedBlack(no.right);
+    public boolean isRedBlack(Node root) {
+    if (root == null) return true;
+    if (root.isRed) return false; // Propriedade 1: raiz preta
+    return isRedBlackHelper(root) != -1;
     }
 
-    public int blackHeight(Node no){
-        if(no == null) return 1;
-        int left = blackHeight(no.left);
-        int right = blackHeight(no.right);
-        return Math.max(left, right) + (no.isRed ? 0 : 1);
+    private int isRedBlackHelper(Node no) {
+        if (no == null) return 1; // NIL é preto
+        
+        // Propriedade 3: sem vermelhos consecutivos
+        if (no.isRed && ((no.left != null && no.left.isRed) || 
+                        (no.right != null && no.right.isRed))) {
+            return -1; // Inválida
+        }
+        
+        int leftHeight = isRedBlackHelper(no.left);
+        int rightHeight = isRedBlackHelper(no.right);
+        
+        // Se subárvore inválida ou alturas diferentes
+        if (leftHeight == -1 || rightHeight == -1 || leftHeight != rightHeight) {
+            return -1;
+        }
+        
+        return leftHeight + (no.isRed ? 0 : 1);
     }
 
     public void insert(int v){
